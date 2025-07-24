@@ -21,7 +21,10 @@ Future<void> main(List<String> args) async {
   ]);
 
   final observer = DerpibooruScoreObserver(
-    imageRepository: ImageRepository(apiKey: env['derpibooru_key']!),
+    imageRepository: ImageRepository(
+      apiKey: env['derpibooru_key']!,
+      query: 'artist:jjsh',
+    ),
     interval: 60 * 5,
     oneColumn: true,
     credentials: {
