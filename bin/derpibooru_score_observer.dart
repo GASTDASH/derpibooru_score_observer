@@ -3,7 +3,7 @@ import 'package:derpibooru_score_observer/image_repository.dart';
 import 'package:dotenv/dotenv.dart';
 
 Future<void> main(List<String> args) async {
-  final env = DotEnv()..load(['../.env']);
+  final env = DotEnv()..load(['.env']);
   env.isEveryDefined([
     'type',
     'project_id',
@@ -17,10 +17,11 @@ Future<void> main(List<String> args) async {
     'client_x509_cert_url',
     'universe_domain',
     'table_id',
+    'derpibooru_key',
   ]);
 
   final observer = DerpibooruScoreObserver(
-    imageRepository: ImageRepository(),
+    imageRepository: ImageRepository(apiKey: env['derpibooru_key']!),
     interval: 60 * 5,
     oneColumn: true,
     credentials: {

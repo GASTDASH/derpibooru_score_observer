@@ -2,6 +2,10 @@ import 'package:derpibooru_score_observer/image.dart';
 import 'package:dio/dio.dart';
 
 class ImageRepository {
+  final String? apiKey;
+
+  ImageRepository({this.apiKey});
+
   final _dio = Dio();
 
   /// Возвращает список изображений из Derpibooru на первой странице ([perPage] указывает количество изображений на одной странице). Если [filterByCurrentDate] = true, то возвращаются только изображений, которым меньше 1 дня ([image.createdAt] < dayAgo)
@@ -12,7 +16,11 @@ class ImageRepository {
     try {
       final res = await _dio.get(
         'https://derpibooru.org/api/v1/json/search/images',
-        queryParameters: {'q': 'artist:jjsh', 'per_page': perPage},
+        queryParameters: {
+          'q': 'artist:jjsh',
+          'per_page': perPage,
+          'key': apiKey,
+        },
       );
       if (res.data == null) {
         print('Data is null');
@@ -44,8 +52,8 @@ class ImageRepository {
         'Ошибка получения данных с сервера: '
         '$e',
       );
-      rethrow;
-      // return [];
+      // rethrow;
+      return [];
     }
   }
 }

@@ -66,10 +66,24 @@ class DerpibooruScoreObserver {
       // Поиск строки с изображением
       int rowId = links.indexWhere((link) => link.contains('${image.id}')) + 1;
 
-      // Обновление информации
-      table.values.insertValue(image.faves, column: 5, row: rowId);
-      table.values.insertValue(image.upvotes, column: 6, row: rowId);
-      table.values.insertValue(image.downvotes, column: 7, row: rowId);
+      // Если строка с ссылкой не найдена
+      if (rowId == 0) {
+        print('Не найдена строка с ссылкой на изображение ${image.id}');
+        return;
+      }
+
+      try {
+        // Обновление информации
+        table.values.insertRow(rowId, [
+          image.faves,
+          image.upvotes,
+          image.downvotes,
+        ], fromColumn: 5);
+      } catch (e) {
+        print(
+          'Не удалось обновить значения в таблице в строке $rowId (imageId = ${image.id})\n$e',
+        );
+      }
     }
   }
 
@@ -84,8 +98,9 @@ class DerpibooruScoreObserver {
 
   /// Выполнение команд для очистки консоли
   void _clearConsole() {
-    print(Process.runSync("cls", [], runInShell: true).stdout);
-    print(Process.runSync("clear", [], runInShell: true).stdout);
+    // print(Process.runSync("cls", [], runInShell: true).stdout);
+    // print(Process.runSync("clear", [], runInShell: true).stdout);
+    print("\x1B[2J\x1B[0;0H");
   }
 
   /// Отображение списка изображений в консоли
